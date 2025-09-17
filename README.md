@@ -4,6 +4,47 @@ An experimental hardware design domain specific language (DSL) implemented in Ag
 ## Pre-requisites
 You will need to install [Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) and [Verilator](https://veripool.org/guide/latest/install.html), a freely available SystemVerilog simulator.
 
+
+## Examples
+Here is an example of a tww-sorter circuit written using the Agate DSL in Agda:
+
+```agda
+twoSorter : {m : Set → Set} {Bit : Set} (n : ℕ) ⦃ _ : RawMonad m ⦄  ⦃ _ : Agate m Bit ⦄ → Vec Bit n × Vec Bit n → m (Vec Bit n × Vec Bit n)
+twoSorter n (x , y)
+  = do lt ← lessThan (x , y)
+       lower ← mux (lt , (x , y))
+       higher ← mux (lt , (y , x))
+       return (lower , higher)
+```
+
+Agate can compile an instance of this specialized to 8-bit unsigned numbers into a SystemVerilog file:
+
+```verilog
+module twoSorter8(
+  input  logic [7:0] x,
+  input  logic [7:0] y,
+  output logic [7:0] lower,
+  output logic [7:0] higher);
+  logic net0;
+
+  logic [7:0] vec0;
+  logic [7:0] vec1;
+  logic [7:0] vec2;
+  logic [7:0] vec3;
+  assign higher = vec3;
+  assign lower = vec2;
+  assign vec3 = net0 ? vec1 : vec0;
+  assign vec2 = net0 ? vec0 : vec1;
+  assign net0 = vec0 < vec1;
+  assign vec1 = y;
+  assign vec0 = x;
+endmodule: twoSorter8
+```
+
+After the testbench is run, a VCD waveform is produced showing the two-sorting working:
+
+![two sorter waveform](twoSorter8.jpg)
+
 ## Compiling Main.hs to produce an executable
 The default `make` rule will compile the top-level main program in `Main.hs` into a binary. When this binary is run several SystemVerilog hardware description files are generated from their Agda Agate descriptions.
 Once the SystemVerilog hardware files are generated, testbench are executed using Verilator to test each generated SystemVerilog file.
