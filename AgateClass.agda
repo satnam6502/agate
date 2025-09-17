@@ -7,6 +7,7 @@ open import Effect.Monad
 
 record Agate (m : Set → Set) ⦃ _ : RawMonad m ⦄ (Bit : Set) : Set where
   field
+     b0 : Bit
      inv : Bit -> m Bit
      and2 : Bit × Bit -> m Bit
      or2 : Bit × Bit -> m Bit

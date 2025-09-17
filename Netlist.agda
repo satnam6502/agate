@@ -23,6 +23,7 @@ data VecType : Set where
 data Bit : Set where
   localNet : ℕ → Bit
   indexOfVec : ℕ → ℕ → Bit
+  zeroV : Bit
 
 data NetType : Set where
   BitType : NetType
@@ -154,7 +155,8 @@ muxNL {n = n} (sel , (v1 , v2)) =
 instance
   NetlistAgate : Agate NetlistState Bit
   NetlistAgate = record
-     { inv = invNL
+     { b0 = zeroV
+     ; inv = invNL
      ; and2 = and2NL
      ; or2 = or2NL
      ; xor2 = xor2NL

@@ -20,6 +20,7 @@ open NetlistInfo
 showBit : Bit → String
 showBit (localNet i) = "net" ++ show i
 showBit (indexOfVec v i) = "vec" ++ show v ++ "[" ++ show i ++ "]"
+showBit zeroV = "1'b0"
 
 sameValue : ℕ → ℕ → Bool
 sameValue n m with n ≟ m

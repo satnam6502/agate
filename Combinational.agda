@@ -19,7 +19,8 @@ instance
   MonadIdentity = Effect.Monad.Identity.monad
   SimAgate : Agate Identity Bool
   SimAgate = record
-     { inv = λ x → pure (not x)
+     { b0 = false
+     ; inv = λ x → pure (not x)
      ; and2 = λ (x ,  y) → pure (x ∧ y)
      ; or2 = λ (x ,  y) → pure (x ∨ y)
      ; xor2 = λ (x ,  y) → pure (x xor y)

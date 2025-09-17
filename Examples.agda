@@ -134,9 +134,13 @@ adder8SV : String
 adder8SV = circuitToSystemVerilog adder8Top
 
 
-{-
-adderCorrect : ∀ (n : ℕ) (carryIn : Bool) (a b : Vec Bool n) → adder n (carryIn , (a , b)) ≡ pure (toBitVecAlt n (fromBitVec a + fromBitVec b) , + fromBit carryIn)
--}
+adderN : {m : Set → Set} {Bit : Set} (n : ℕ) ⦃ _ : RawMonad m ⦄  ⦃ _ : Agate m Bit ⦄ → (Vec Bit n × Vec Bit n) → m (Vec Bit (1 + n))
+adderN n (a , b) = do (s , c) ← adder n (b0 , (a , b))
+                      return (s ∷ʳ c)
+
+postulate
+  adderCorrect : ∀ (n : ℕ) (carryIn : Bool) (a b : Vec Bool n) → adderN n (a , b) ≡ pure (toBitVecAlt (1 + n) (fromBitVec a + fromBitVec b))
+ 
 
 -- An adder using the SystemVerilog +
 adder16Top : NetlistState ⊤
