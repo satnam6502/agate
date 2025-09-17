@@ -2,7 +2,7 @@
 An experimental hardware design domain specific language (DSL) implemented in Agda
 
 ## Pre-requisites
-You will need to install Agda and Verilator, a freely available SystemVerilog simulator.
+You will need to install [Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) and [Verilator](https://veripool.org/guide/latest/install.html), a freely available SystemVerilog simulator.
 
 ## Compiling Main.hs to produce an executable
 The default `make` rule will compile the top-level main program in `Main.hs` into a binary. When this binary is run several SystemVerilog hardware description files are generated from their Agda Agate descriptions.
